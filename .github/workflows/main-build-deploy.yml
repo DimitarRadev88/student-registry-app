@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI-CD
 
 on:
   push:
@@ -25,4 +25,16 @@ jobs:
        run: npm start &
      - name: Run tests
        run: npm test
-      
+
+  deploy:
+  
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy app
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_TOKEN }}
+          wait-for-success: true
